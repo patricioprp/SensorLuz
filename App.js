@@ -6,9 +6,10 @@
  * @flow
  */
 
-import React, {Component, DeviceEventEmitter } from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import React, {Component} from 'react';
+import {Platform, StyleSheet, Text, View, DeviceEventEmitter} from 'react-native';
 import { SensorManager } from 'NativeModules';
+
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -16,23 +17,28 @@ const instructions = Platform.select({
     'Double tap R on your keyboard to reload,\n' +
     'Shake or press menu button for dev menu',
 });
-componentWillMount(){
-  SensorManager.startLightSensor(100);
-DeviceEventEmitter.addListener('LightSensor', function (data) {
-  
-  console.log(data.light)
-  
-});
-SensorManager.stopLightSensor();
-}
 
 export default class App extends Component {
+  state = {
+    luz: ''
+  };
+componentWillMount(){
+  SensorManager.startLightSensor(100);
+  DeviceEventEmitter.addListener('LightSensor', function (data) {
+    
+    console.log(data.light)
+    this.setState({ luz: data.light });
+    
+  });
+  //SensorManager.stopLightSensor();
+}
   render() {
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>Welcome to React Native!</Text>
         <Text style={styles.instructions}>To get started, edit App.js</Text>
         <Text style={styles.instructions}>{instructions}</Text>
+        <Text >la luz es {this.state.luz}</Text>
       </View>
     );
   }
