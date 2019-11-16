@@ -19,17 +19,18 @@ const instructions = Platform.select({
 });
 
 export default class App extends Component {
-  state = {
-    luz: ''
-  };
+constructor(props){
+  super(props);
+  this.state = {luz: 0};
+}
 componentWillMount(){
   SensorManager.startLightSensor(100);
   DeviceEventEmitter.addListener('LightSensor', function (data) {
     
     console.log(data.light)
-    this.setState({ luz: data.light });
+    this.setState ( {luz: data.light} );    
     
-  });
+  }.bind(this));
   //SensorManager.stopLightSensor();
 }
   render() {
